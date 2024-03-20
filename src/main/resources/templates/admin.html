@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin page</title>
+</head>
+<body>
+<br>
+<table border="1">
+    <h1>Admin Page</h1>
+    <tr>
+        <th>ID</th>
+        <br>
+        <th>Name</th>
+        <br>
+        <th>Surname</th>
+        <br>
+        <th>Username</th>
+        <br>
+        <th>Roles</th>
+    </tr>
+    <tr>
+    <tr th:each="user : ${admin}">
+        <td th:text="${user.getId()}">
+        <td th:text="${user.getName()}">
+        <td th:text="${user.getSurname()}">
+        <td th:text="${user.getUsername()}">
+        <td th:each="role:${user.roles}" th:text="${role.getAuthority()}"></td>
+    </tr>
+
+</table>
+</body>
+</html>
