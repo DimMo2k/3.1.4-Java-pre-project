@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -40,8 +41,10 @@ public class User implements UserDetails {
     private String surname;
 
     @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов")
+    @NotEmpty
     private String username;
-    @Size(min=2, message = "Не меньше 2 символов")
+    @Size(min = 2, message = "Не меньше 2 символов")
+    @NotEmpty
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -138,4 +141,19 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, username, password, roles);
+    }
+
+
 }
