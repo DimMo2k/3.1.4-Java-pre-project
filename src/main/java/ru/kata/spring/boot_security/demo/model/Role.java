@@ -18,7 +18,7 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "role")
+    @Column(name = "role", unique = true)
     private String name;
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
@@ -64,9 +64,20 @@ public class Role implements GrantedAuthority {
         return getName();
     }
 
+    public String getRoleName() {
+        return getName().replace("ROLE_", "");
+    }
+
     @Override
     public String toString() {
-        return this.name;
+        String role = getName();
+        if (role.equals("ROLE_ADMIN")) {
+            return "ADMIN";
+        }
+        if (role.equals("ROLE_USER")) {
+            return "USER";
+        }
+        return role;
     }
 
     @Override

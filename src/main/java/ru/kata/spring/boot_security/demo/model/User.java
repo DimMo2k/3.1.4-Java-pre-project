@@ -18,11 +18,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -40,11 +42,17 @@ public class User implements UserDetails {
     @NotEmpty
     private String surname;
 
+    @Column(name = "age")
+    private int age;
+
     @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов")
     @NotEmpty
+    @Email
+    @Column(name = "username", unique = true)
     private String username;
     @Size(min = 2, message = "Не меньше 2 символов")
     @NotEmpty
+    @Column(name = "password")
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -59,12 +67,13 @@ public class User implements UserDetails {
 
     }
 
-    public User(String name, String surname, String username, String password, Set<Role> roles) {
+    public User(String name, String surname, int age, String username, String password, Set<Role> roles) {
         this.name = name;
         this.surname = surname;
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.age = age;
     }
 
     @Override
@@ -126,6 +135,14 @@ public class User implements UserDetails {
         this.surname = surname;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -142,17 +159,24 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public String getRoleNames() {
+        return roles.stream()
+                .map(role -> role.getName()
+                        .replace("ROLE_", ""))
+                .collect(Collectors.joining(" "));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(age, user.age) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname, username, password, roles);
+        return Objects.hash(id, name, surname, age, username, password, roles);
     }
 
 

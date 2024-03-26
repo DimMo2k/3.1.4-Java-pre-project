@@ -33,8 +33,8 @@ public class dbInit {
         roleService.saveRole(adminRole);
         roleService.saveRole(userRole);
 
-        userRepository.save(new User("Sergey", "Ivanov", "admin", passwordEncoder.encode("admin"), Set.of(adminRole)));
-        userRepository.save(new User("Dmitiriy", "Mochalov", "user", passwordEncoder.encode("user"), Set.of(userRole)));
+        userRepository.save(new User("Sergey", "Ivanov", 25, "Ivanov@gmail.com", passwordEncoder.encode("admin"), Set.of(adminRole)));
+        userRepository.save(new User("Dmitiriy", "Mochalov", 34, "Mochalov@gmail.com", passwordEncoder.encode("user"), Set.of(userRole)));
 
     }
 }
